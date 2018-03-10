@@ -1,2 +1,6 @@
-# JobWebScrapping
-Script to get job postings straight from select company career websites.
+# Job Web Scrapping
+Script, written in JavaScript, that does some web automation and web/data scraping.
+
+The purpose of the script is to fetch job posting data from select company career websites.
+For example, the script will go to a hard-coded company website and enter some filter criteria. Then it will get that data.
+After getting data from multiple company sites, that data will be aggregated.
