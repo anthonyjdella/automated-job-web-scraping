@@ -17,8 +17,17 @@ let scrape = async () => {
 
     const result = await page.evaluate(() => {
 
-        let allList = document.getElementsByTagName("UL")[2];
+    //WHY DOESNT THIS WORK??!?!?!?
+        // let allJobs = [];
+        // let allList = document.getElementsByTagName("UL")[2];
+        // for (var i=0;i<allList.length;i++){
+        //     var result = allList.getElementsByTagName("LI")[i].innerText;
+        //     console.log(result);
+        //     allJobs.push(result);
+        // }
+
         let allJobs = []
+        let allList = document.getElementsByTagName("UL")[2];
         let elementList = allList.getElementsByTagName("LI")[0].innerText;
         let elementList1 = allList.getElementsByTagName("LI")[1].innerText;
         let elementList2 = allList.getElementsByTagName("LI")[2].innerText;
