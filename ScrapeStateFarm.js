@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer');
+const fs = require("fs");
 
 let scrape = async () => {
     const browser = await puppeteer.launch({ headless: false });
@@ -45,4 +46,7 @@ let scrape = async () => {
 
 scrape().then((value) => {
     console.log(value);
+    fs.writeFile("state-farm-jobs.txt",value, function(err){
+        console.log("'File successfully written! - Check your project directory for the state-farm-jobs.txt file");
+    });
 });
