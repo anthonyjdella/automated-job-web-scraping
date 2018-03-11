@@ -1,0 +1,26 @@
+{
+  "name": "job-web-scrapping",
+  "version": "1.0.0",
+  "description": "Script to get job postings straight from select company career websites.",
+  "main": "Controller.js",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "npm": "^5.7.1",
+    "puppeteer": "^1.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leeznon/job-web-scrapping.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leeznon/job-web-scrapping/issues"
+  },
+  "homepage": "https://github.com/leeznon/job-web-scrapping#readme"
+}
