@@ -15,4 +15,4 @@ After getting data from multiple company sites, that data will be aggregated. Ki
 $ npm install
 $ node ScrapeStateFarm.js
 ```
-
+*npm install will download all the required dependencies for this project
