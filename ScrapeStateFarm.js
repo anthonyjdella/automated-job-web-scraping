@@ -17,16 +17,14 @@ let scrape = async () => {
     await page.waitFor(2000);
 
     const result = await page.evaluate(() => {
-
-    //WHY DOESNT THIS WORK??!?!?!?
-        // let allJobs = [];
-        // let allList = document.getElementsByTagName("UL")[2];
-        // for (var i=0;i<allList.length;i++){
-        //     var result = allList.getElementsByTagName("LI")[i].innerText;
-        //     console.log(result);
-        //     allJobs.push(result);
-        // }
-
+        //WHY DOESNT THIS WORK??!?!?!?
+            // let allJobs = [];
+            // let allList = document.getElementsByTagName("UL")[2];
+            // for (var i=0;i<allList.length;i++){
+            //     var result = allList.getElementsByTagName("LI")[i].innerText;
+            //     console.log(result);
+            //     allJobs.push(result);
+            // }
         let allJobs = []
         let allList = document.getElementsByTagName("UL")[2];
         let elementList = allList.getElementsByTagName("LI")[0].innerText;
@@ -34,7 +32,6 @@ let scrape = async () => {
         let elementList2 = allList.getElementsByTagName("LI")[2].innerText;
         let elementList3 = allList.getElementsByTagName("LI")[3].innerText;
         allJobs.push(elementList,elementList1,elementList2,elementList3);
-        
         return allJobs;
     });
     
@@ -42,11 +39,9 @@ let scrape = async () => {
     return result;
 };
 
-
-
 scrape().then((value) => {
     console.log(value);
-    fs.writeFile("state-farm-jobs.txt",value, function(err){
+    fs.writeFile("state-farm-jobs.txt",value.join("\r\n"), function(err){
         console.log("'File successfully written! - Check your project directory for the state-farm-jobs.txt file");
     });
 });
