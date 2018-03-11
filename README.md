@@ -13,6 +13,6 @@ After getting data from multiple company sites, that data will be aggregated. Ki
 # Install:
 ```
 $ nmp install
-$ node StateFarmJobs.js
+$ node ScrapeStateFarm.js
 ```
 
