@@ -12,7 +12,7 @@ After getting data from multiple company sites, that data will be aggregated. Ki
 
 # Install:
 ```
-$ nmp install
+$ npm install
 $ node ScrapeStateFarm.js
 ```
 
