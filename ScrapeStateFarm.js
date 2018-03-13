@@ -11,18 +11,18 @@ const STATE_FARM_SRCH_TECH = "technology";
 const STATE_FARM_SUBMIT_BTN = "#ctl00_siteContent_widgetLayout_rptWidgets_ctl03_widgetContainer_ctl00_btnSearch";
 
 let scrape = async () => {
+    //Automation
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     await page.goto(STATE_FARM_URI);
-    
-    //Web Scraping
     await page.click(STATE_FARM_LOC_DRPDWN);
     await page.click(STATE_FARM_TX_RD_BTN);
     await page.click(STATE_FARM_SRCH_FRM);
     await page.keyboard.type(STATE_FARM_SRCH_TECH);
     await page.click(STATE_FARM_SUBMIT_BTN);
     await page.waitFor(2000);
-
+    
+    //Scraping
     const checkPages = await page.evaluate(() => {
         let pages = document.getElementsByClassName("results-paging")[2];
         let allPages = pages.getElementsByClassName("pagerLink");
