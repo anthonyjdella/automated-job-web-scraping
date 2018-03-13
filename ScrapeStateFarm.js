@@ -15,48 +15,48 @@ let scrape = async () => {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     await page.goto(STATE_FARM_URI);
-    await page.click(STATE_FARM_LOC_DRPDWN);
-    await page.click(STATE_FARM_TX_RD_BTN);
-    await page.click(STATE_FARM_SRCH_FRM);
-    await page.keyboard.type(STATE_FARM_SRCH_TECH);
+    //Comment out when testing multiple pages
+    // 
+    // await page.click(STATE_FARM_LOC_DRPDWN);
+    // await page.click(STATE_FARM_TX_RD_BTN);
+    // await page.click(STATE_FARM_SRCH_FRM);
+    // await page.keyboard.type(STATE_FARM_SRCH_TECH);
+    //
     await page.click(STATE_FARM_SUBMIT_BTN);
     await page.waitFor(2000);
-    
+
     //Scraping
-    const checkPages = await page.evaluate(() => {
+    const result = await page.evaluate(() => {
         let pages = document.getElementsByClassName("results-paging")[2];
         let allPages = pages.getElementsByClassName("pagerLink");
-            for (var j=0;j<allPages.length;j++){
-                let eachPage = pages.getElementsByClassName("pagerLink")[j].innerHTML;
-                if (eachPage){
-                    //scrape data function
-                    //result();
-                    window.alert("pass");
-                }
-                else {
-                    window.alert("Fail");
+        let allJobs = [];
+        //Loop through each page
+        for (var j = 0; j < allPages.length; j++) {
+            let eachPage = pages.getElementsByClassName("pagerLink")[j].innerHTML;
+            if (eachPage) {
+                //Scrape jobs on single page
+                let listSection = document.getElementsByTagName("ul")[2];
+                let allList = listSection.getElementsByTagName("li");
+                for (var i = 0; i < allList.length; i++) {
+                    let eachList = listSection.getElementsByTagName("li")[i].innerText;
+                    allJobs.push(eachList);
                 }
             }
-    });
-    
-    const result = await page.evaluate(() => {
-        let allJobs = []
-        let listSection = document.getElementsByTagName("ul")[2];
-        let allList = listSection.getElementsByTagName("li");
-        for (var i=0;i<allList.length;i++){
-            let eachList = listSection.getElementsByTagName("li")[i].innerText;
-            allJobs.push(eachList);
+            else {
+                window.alert("Fail");
+            }
+            //Turn the page
         }
         return allJobs;
     });
-   
+
     browser.close();
     return result;
 };
 
 scrape().then((value) => {
     console.log(value);
-    fs.writeFile("state-farm-jobs.txt",value.join("\r\n"), function(err){
+    fs.writeFile("state-farm-jobs.txt", value.join("\r\n"), function (err) {
         console.log("'File successfully written! - Check your project directory for the state-farm-jobs.txt file");
     });
 });
