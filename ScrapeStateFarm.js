@@ -29,65 +29,54 @@ let scrape = async () => {
     await page.click(STATE_FARM_SUBMIT_BTN);
     await page.waitFor(2000);
 
-
-
-    //~~~~~~~~~~TESTING CLICK SELECTOR FOR NEXT PAGE
-    //TODO
-    //to go to next page, click must be on the following selector. it wont work with eachPage ('<span class="text">&nbsp;2&nbsp;</span>')
-    // await page.click('#ctl00_siteContent_widgetLayout_rptWidgets_ctl03_widgetContainer_ctl00_pgrList_pagingLinksRepeater_ctl01_pageSelector');
-    // await page.waitFor(5000)
-
-
-
     //Scraping
     const result = await page.evaluate(() => {
-        let pages = document.getElementsByClassName("results-paging")[2];
-        let allPages = pages.getElementsByClassName("pagerLink");
         let allJobs = [];
-        //Loop through each page
-        for (var j = 0; j < allPages.length; j++) {
-            let eachPage = pages.getElementsByClassName("pagerLink")[j].innerHTML;
-            if (eachPage) {
-                //Scrape jobs on single page
-                let listSection = document.getElementsByTagName("ul")[2];
-                let allList = listSection.getElementsByTagName("li");
-                for (var i = 0; i < allList.length; i++) {
-                    let eachList = listSection.getElementsByTagName("li")[i].innerText;
-                    allJobs.push(eachList);
-
-
-                    //~~~~~~~~~~~~~~~~~~~~~~~TODO / FIX~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    //Turn the page
-                    let nextPage = async () => {
-                        //to go to next page, click must be on the following selector. it wont work with eachPage ('<span class="text">&nbsp;2&nbsp;</span>')
-                        const nextPageResult = await page.click('#ctl00_siteContent_widgetLayout_rptWidgets_ctl03_widgetContainer_ctl00_pgrList_pagingLinksRepeater_ctl01_pageSelector');
-                        return nextPageResult;
-                        await page.waitFor(2000);
-                    };
-                    nextPage().then((value) => {
-                        window.alert(value);
-                    });
-                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    
-
-                    //TRYING NEW THINGS FROM OTHER GUIDES
-                    //let selection = await page.$$('');
-
-
-
-
-                }
+        let nextPageButton = document.querySelector("#ctl00_siteContent_widgetLayout_rptWidgets_ctl03_widgetContainer_ctl00_pgrList_nextPageLink");
+        if (nextPageButton) {
+            let listSection = document.getElementById("ctl00_siteContent_widgetLayout_rptWidgets_ctl03_widgetContainer_ctl00_ctl00");
+            let allList = listSection.getElementsByTagName("li");
+            for (var i = 0; i < allList.length; i++) {
+                let eachList = listSection.getElementsByTagName("li")[i].innerText;
+                allJobs.push(eachList);
             }
-            else {
-                window.alert("Fail");
-            }
+            return allJobs;
+            // call test();
+            // call nextPage();
         }
-        return allJobs;
+        else {
+            // call test();
+            let listSection = document.getElementById("ctl00_siteContent_widgetLayout_rptWidgets_ctl03_widgetContainer_ctl00_ctl00");
+            let allList = listSection.getElementsByTagName("li");
+            for (var i = 0; i < allList.length; i++) {
+                let eachList = listSection.getElementsByTagName("li")[i].innerText;
+                allJobs.push(eachList);
+            }
+            return allJobs;
+        }
     });
 
     browser.close();
     return result;
 };
+
+
+//----------------------invoke this method in  "if" "else" blocks------------------
+// function test (){
+//     let allJobs = [];
+//     let listSection = document.getElementById("ctl00_siteContent_widgetLayout_rptWidgets_ctl03_widgetContainer_ctl00_ctl00");
+//     let allList = listSection.getElementsByTagName("li");
+//     for (var i = 0; i < allList.length; i++) {
+//         let eachList = listSection.getElementsByTagName("li")[i].innerText;
+//         allJobs.push(eachList);
+//     }
+//     return allJobs;
+// }
+
+//-----------------------method to click the next page button---------------------
+// function nextPage(){
+    //here
+// }
 
 scrape().then((value) => {
     let data = value.join("\r\n");
