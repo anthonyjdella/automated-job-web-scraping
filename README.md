@@ -42,7 +42,7 @@ $ node ScrapeStateFarm-v3.js
   * npm install will download all the required dependencies for this project (Puppeteer and File System)
 
 # Guide: 
-## Project Setup
+## Project Setup:
 Create a folder on your directory that will hold all of the project files.
 ```
 $ mkdir automated-web-scraping
@@ -60,7 +60,7 @@ $ npm install file-system --save
 ```
 Create a main file that contains the code. Most of the code in the next section will be in this file. I saved it as ```ScrapeStateFarm-v3.js``` within the project directory that we created earlier ```automated-web-scraping```.
 
-## Coding
+## Coding:
 Import puppeteer and file system. We will talk about what ```constants``` is later on. 
 ```js
 const puppeteer = require('puppeteer');
@@ -158,11 +158,84 @@ async function getNumPages(page) {
     return pageCount;
 }
 ```
-After calling ```getNumPages``` and returning the number of pages, I can loop through the pages. Then at each page, I can loop through the list of job postings on the site. Take a look at how the State Farm website is. It has 1 OR multiple pages. Then a list of job postings.
+After calling ```getNumPages``` and returning the number of pages, we can loop through the pages. Then at each page, can loop through the list of job postings on the site. Take a look at how the State Farm website is. It has 1 OR multiple pages. Then a list of job postings.
 ### INSERT IMAGE
 
+Now look at the code to do the actual web scraping. Again, the outer loop is to loop through the pages and the inner loop goes through the list of job postings.
+```js
+   for (let h = 1; h <= numPages; h++) {
+        console.log("Page Number : " + h);
+        let jobListLength = await page.evaluate((sel) => {
+            let jobSelectorID = document.getElementById(sel);
+            let jobSelectorTagName = jobSelectorID.getElementsByTagName("li");
+            return jobSelectorTagName.length;
+        }, JOB_SELECTOR_ID);
 
-# Conclusion:
+        for (let i = 1; i <= jobListLength; i++) {
+            let jobSelector = LIST_JOB_SELECTOR.replace("INDEX", i)
+
+            let jobListing = await page.evaluate((sel) => {
+                return document.querySelector(sel).innerText;
+            }, jobSelector);
+
+            arrayJobResults.push(jobListing);
+        }
+        if (numPages != 1) {
+            await page.click(constants.STATE_FARM_NEXT_PAGE_SELECTOR);
+            await page.waitFor(2000);
+        }
+    }
+```
+
+```jobListLength``` returns the number of jobs on 1 page. To do this, find the container selector of all the jobs, get each list item and count them.
+```js
+        let jobListLength = await page.evaluate((sel) => {
+            let jobSelectorID = document.getElementById(sel);
+            let jobSelectorTagName = jobSelectorID.getElementsByTagName("li");
+            return jobSelectorTagName.length;
+        }, JOB_SELECTOR_ID);
+```
+
+Now that we know how many jobs are on 1 page, we can loop through them. And push the results to an array.
+```js
+        for (let i = 1; i <= jobListLength; i++) {
+            let jobSelector = LIST_JOB_SELECTOR.replace("INDEX", i)
+
+            let jobListing = await page.evaluate((sel) => {
+                return document.querySelector(sel).innerText;
+            }, jobSelector);
+
+            arrayJobResults.push(jobListing);
+        }
+```
+We have scraped the data for 1 page, but what if there are multiple pages? We actually need to click on the next page button and scrape the next page. We use a familiar ```.click()``` function to click on the next page selector. Let's wait a little while for the next page to load.
+```js
+        if (numPages != 1) {
+            await page.click(constants.STATE_FARM_NEXT_PAGE_SELECTOR);
+            await page.waitFor(2000);
+        }
+```
+
+After we have have gotten the data from all of the pages, we need to close the headless browser. And return all the results to an array.
+```js
+    browser.close();
+    return arrayJobResults;
+```
+
+Lastly, after we have our jobs stored in the array, we will do some formatting and log it to the console. Up until now, we haven't used File System, but here it comes. ```.writeFile()``` will take our data and print it to a text file.
+
+```js
+run().then((value) => {
+    let data = value.join("\r\n");
+    console.log(data);
+    fs.writeFile("state-farm-jobs.txt", data, function (err) {
+        console.log(constants.SUCCESS_STMT);
+    });
+});
+```
+## Output:
+
+### INSERT IMAGE
 
 # Thanks: 
 
