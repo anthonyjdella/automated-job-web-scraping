@@ -118,7 +118,7 @@ module.exports = Object.freeze({
 });
 ```
 
-To access the constants:
+To access the constants with re-written code:
 ```js
     const page = await browser.newPage();
     await page.goto(constants.STATE_FARM_URI);
@@ -129,6 +129,38 @@ To access the constants:
     await page.click(constants.STATE_FARM_SUBMIT_BTN);
     await page.waitFor(2000);
 ```
+I will need to get the job results from multiple pages (if there are many job openings). To do this, I need to find out how many pages of jobs I'm getting. I will call this function.
+```js
+const numPages = await getNumPages(page);
+    console.log('Number of pages: ', numPages);
+```
+
+Within this async function, I need to pass ```page```. Next, I need to identify the page selector ```PAGE_CONTAINTER_SELECTOR``` that contains all of the page numbers.
+### INSERT IMAGE
+
+After I have that selector, I need to pass that as an argument. Notice that ```pageCount``` is the first time we've seen ```await``` keyword. ```PAGE_CONTAINTER_SELECTOR``` will be passed as ```sel``` to ```document.querySelector(sel)```.
+But was just the container element, so to select each individual page button, I need to use ```pageContainer.getElementsByClassName();```. Next, loop through each page and get the number of pages. If there is no page button, return '1' because there is only 1 page. The data will be stored in ```pageCount```, then we return ```pageCount```.
+
+```js
+async function getNumPages(page) {
+    const PAGE_CONTAINTER_SELECTOR = constants.STATE_FARM_PAGE_CONTAINTER_SELECTOR;
+    let pageCount = await page.evaluate((sel) => {
+        let defaultCount = 1;
+        let pageContainer = document.querySelector(sel);
+        let allPages = pageContainer.getElementsByClassName("pagerLink");
+        if (allPages.length > 0) {
+            return allPages.length;
+        }
+        else {
+            return defaultCount;
+        }
+    }, PAGE_CONTAINTER_SELECTOR);
+    return pageCount;
+}
+```
+After calling ```getNumPages``` and returning the number of pages, I can loop through the pages. Then at each page, I can loop through the list of job postings on the site. Take a look at how the State Farm website is. It has 1 OR multiple pages. Then a list of job postings.
+### INSERT IMAGE
+
 
 # Conclusion:
 
