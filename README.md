@@ -1,13 +1,22 @@
 # Automated Job Web Scraping Script
 
+![alt text](https://livelearn.ca/wp-content/uploads/2016/02/job-rejection.png
+ "Sad guy getting rejected from a job")
+
+> Have you ever been disappointed to know that you got rejected from a job because you applied too late? They already hired a candidate! 
+
+> How many times have you missed out on job opportunities because you didn't know a company was hiring for that position? It might be the perfect job for you, but you just didn't know about it!
+
+**This app will help you keep up to date with job postings so you never miss out on the right job opportunity!**
+
 ![alt text](http://i2.wp.com/www.testautomationguru.com/wp-content/uploads/2017/08/header-stock.png?resize=647%2C196
  "Scrape data from a web page to a file on your computer")
-
-Script, written in Node.js, that does some web automation and web/data scraping. The APIs used include Puppeteer and File System.
+ 
+Automated-job-web-scraping is a script, written in Node.js, that does some web automation and web/data scraping. The APIs used include Puppeteer and File System.
 
 The purpose of the script is to automatically fetch job posting data from select company career websites.
 For example, the script will go to a hard-coded company website and enter some filter criteria. Then it will get that data.
-After getting data from the company's website, that data will be saved to a text file, in which the user can easily view new job postings.
+After getting data from the company's website, that data will be saved to a text file, in which the user can easily view new job postings. **You'll never miss out on that job posting again!**
 
 # Table of Contents: 
 
