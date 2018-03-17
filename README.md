@@ -21,13 +21,14 @@ After getting data from the company's website, that data will be saved to a text
   
 2. **Puppeteer**
 
-   Puppeteer is the official tool for **Chrome Headless**, a headless browser, by the Google Chrome team. Chromeheadless is the industry leader in automated testing of web applications. For more information about Puppeteer, this is a link to their documentation: [Puppeteer Docs](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md)
+   Puppeteer is the official tool for **Chrome Headless**, a headless browser, by the Google Chrome team. Chrome Headless is the industry leader in automated testing of web applications. For more information about Puppeteer, this is a link to their documentation: [Puppeteer Docs](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md)
 
 3. **File System**
 
-   File System is an API for interacting with the file system, such as creating a document and saving it to your file system. For more information about File System, this is a link to their documentation: [FS Docs](https://nodejs.org/api/fs.html#fs_file_system)
+   File System is an API for interacting with the file system, such as creating a document and saving it to your file system. For more information, this is a link to their documentation: [FS Docs](https://nodejs.org/api/fs.html#fs_file_system)
 
 # Install & Run:
+
 1. Install Node.js
 2. To check if it's already installed or to check the verison number (I'm on 8.10.0), type this in your console: 
 ```
@@ -69,27 +70,47 @@ const constants = require("./lib/constants.js");
 ```
 The code is written with asynchronous I/O in mind. Node.js 8 uses ```async``` and ```await``` keywords, which you will see throughout the script. ```async``` means a function returns a resolved Promise. ```await``` means wait until the Promise settles and return its result. 
 
-This is basically how the structure works. ```Run()``` is an async function. When it finishes, the value will be passed in ```.then((value) => {```. Then you can do some other functions.
+This is basically how the structure works. ```run()``` is an async function. When it finishes, the value will be passed in ```.then((value) => {```. Then you can do some other things which will be discussed later.
 
 ```js
 async function run() {
 //await
 }
 run().then((value) => {
+//other things
 });
 ```
-Now comes the web automation part. This will automatically launch the Chrome Headless browser. Set the value to ```false``` for testing and ```true``` when your script is complete.
+Now comes the web automation part using Chrome Headless. This will automatically launch the headless browser. Set the value to ```false``` for testing and ```true``` when your script is complete.
 ```js
     const browser = await puppeteer.launch({
         headless: false
     });
 ```
-```browser.newPage()``` will open a new tab in the browser. Next, we will go to the website we are trying to scrape. In this case, we are going to State Farm's career website to look for job postings. After that, we need to enter some filters to display the jobs that we want to scrape. I only want to see "technology" jobs in Texas. To do all of this with Puppeteer, use ```.click()``` function to click on a section of the web page, use ```.keyboard.type()``` to automatically type something, use ```.waitFor()``` to wait for the page to load the results. 
 
-Now think of the flow that you need to do this manually and code it. Go to the website -> Click on the Location Dropdown -> Select 'Texas' location -> Select the Search field -> Type 'technology' -> Search for the results -> Wait for the page to load.
+Before looking at more code, lets think of the flow that needs to happen.
+
+1. Open a new browser tab
+2. Go to the State Farm careers website 
+3. Click on the Location Dropdown
+4. Select 'Texas' location
+5. Select the Search field 
+6. Type 'technology'
+7. Click for the Search button to load the results 
+8. Wait for the page to load
+
 ![alt text](https://github.com/leeznon/automated-job-web-scraping/blob/master/screenshots/filter-jobs.png
  "Show Job Filter Results")
  
+ Now for some code and explanations: 
+ 
+1. ```browser.newPage()``` will open a new tab in the browser
+2. ```page.goto()``` will go to the website we are trying to scrape. In this case, we are going to State Farm's career website to look for job postings. 
+3. ```.click()``` function to click on a section of the web page.
+4. ```.keyboard.type()``` to automatically type something. I only want to see "Texas" jobs.
+5. ```.click()``` function to click on a section of the web page.
+6. ```.keyboard.type()``` to automatically type something. I only want to see "technology" jobs.
+7. ```.click()``` function to click on a section of the web page.
+8. ```.waitFor()``` to wait for the page to load the results.
 ```js
     const page = await browser.newPage();
     await page.goto("https://statefarm.csod.com/ats/careersite/search.aspx?site=1&c=statefarm");
@@ -131,18 +152,18 @@ To access the constants with re-written code:
     await page.click(constants.STATE_FARM_SUBMIT_BTN);
     await page.waitFor(2000);
 ```
-I will need to get the job results from multiple pages (if there are many job openings). To do this, I need to find out how many pages of jobs I'm getting. I will call this function.
+We will need to get the job results from multiple pages (if there are many job openings). To do this, find out how many pages of jobs there are. Call this function to get the number of pages.
 ```js
 const numPages = await getNumPages(page);
     console.log('Number of pages: ', numPages);
 ```
 
-Within this async function, I need to pass ```page```. Next, I need to identify the page selector ```PAGE_CONTAINTER_SELECTOR``` that contains all of the page numbers.
+Within this async function, need to pass ```page```. Next, identify the page selector ```PAGE_CONTAINTER_SELECTOR``` that contains all of the page numbers.
 ![alt text](https://github.com/leeznon/automated-job-web-scraping/blob/master/screenshots/page-buttons-selector.png
  "Container selector for all the pages")
 
-After I have that selector, I need to pass that as an argument. Notice that ```pageCount``` is the first time we've seen ```await``` keyword. ```PAGE_CONTAINTER_SELECTOR``` will be passed as ```sel``` to ```document.querySelector(sel)```.
-But was just the container element, so to select each individual page button, I need to use ```pageContainer.getElementsByClassName();```. Next, loop through each page and get the number of pages. If there is no page button, return '1' because there is only 1 page. The data will be stored in ```pageCount```, then we return ```pageCount```.
+After we have that selector, we need to pass that as an argument. Notice that ```pageCount``` is the first time we've seen ```await``` keyword. ```PAGE_CONTAINTER_SELECTOR``` will be passed as ```sel``` to ```document.querySelector(sel)```.
+But that was just the container element, so to select each individual page button, use ```pageContainer.getElementsByClassName();```. Next, loop through each page and get the number of pages. If there is no page button, return '1' because there is only 1 page. The data will be stored in ```pageCount```, then we return ```pageCount```.
 
 ```js
 async function getNumPages(page) {
@@ -161,7 +182,7 @@ async function getNumPages(page) {
     return pageCount;
 }
 ```
-After calling ```getNumPages``` and returning the number of pages, we can loop through the pages. Then at each page, can loop through the list of job postings on the site. Take a look at how the State Farm website is. It has 1 OR multiple pages. Then a list of job postings.
+After calling ```getNumPages``` and returning the number of pages, we loop through the pages. Then at each page, loop through the list of job postings on the site. Take a look at how the State Farm website is. It has 1 OR multiple pages. Then a list of job postings.
 ![alt text](https://github.com/leeznon/automated-job-web-scraping/blob/master/screenshots/page-buttons-and-job-list.png
  "State Farm website with number of pages and jobs in a list")
 
@@ -243,7 +264,7 @@ run().then((value) => {
 ![alt text](https://github.com/leeznon/automated-job-web-scraping/blob/master/screenshots/browser-results.png
  "Result of State Farm jobs in web browser.")
  
- 2. What the job results look like on the text file ```state-farm-jobs.txt```.
+ 2. What the job results look like on the text file ```state-farm-jobs.txt``` and the ```console```.
  ![alt text](https://github.com/leeznon/automated-job-web-scraping/blob/master/screenshots/txt-file-results.png
  "Result of State Farm jobs in text file.")
 
