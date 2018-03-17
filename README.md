@@ -69,7 +69,8 @@ const constants = require("./lib/constants.js");
 ```
 The code is written with asynchronous I/O in mind. Node.js 8 uses ```async``` and ```await``` keywords, which you will see throughout the script. ```async``` means a function returns a resolved Promise. ```await``` means wait until the Promise settles and return its result. 
 
-This is basically how the structure works. ```Run()``` is an async function. When it finishes, the value will be passed in ```.then((value) => {```
+This is basically how the structure works. ```Run()``` is an async function. When it finishes, the value will be passed in ```.then((value) => {```. Then you can do some other functions.
+
 ```js
 async function run() {
 //await
@@ -77,7 +78,57 @@ async function run() {
 run().then((value) => {
 });
 ```
+Now comes the web automation part. This will automatically launch the Chrome Headless browser. Set the value to ```false``` for testing and ```true``` when your script is complete.
+```js
+    const browser = await puppeteer.launch({
+        headless: false
+    });
+```
+```browser.newPage()``` will open a new tab in the browser. Next, we will go to the website we are trying to scrape. In this case, we are going to State Farm's career website to look for job postings. After that, we need to enter some filters to display the jobs that we want to scrape. I only want to see "technology" jobs in Texas. To do all of this with Puppeteer, use ```.click()``` function to click on a section of the web page, use ```.keyboard.type()``` to automatically type something, use ```.waitFor()``` to wait for the page to load the results. 
 
+Now think of the flow that you need to do this manually and code it. Go to the website -> Click on the Location Dropdown -> Select 'Texas' location -> Select the Search field -> Type 'technology' -> Search for the results -> Wait for the page to load.
+### INSERT IMAGE
+```js
+    const page = await browser.newPage();
+    await page.goto("https://statefarm.csod.com/ats/careersite/search.aspx?site=1&c=statefarm");
+    await page.click("#ctl00_siteContent_widgetLayout_rptWidgets_ctl03_widgetContainer_ctl00_rptCustomFields_ctl02_customFieldWrapper > button");
+    await page.click("body > div > ul > li:nth-child(46) > label > span");
+    await page.click("#ctl00_siteContent_widgetLayout_rptWidgets_ctl03_widgetContainer_ctl00_rptCustomFields_ctl00_customFieldWrapper_ctl00_txtValue");
+    await page.keyboard.type("technology");
+    await page.click("#ctl00_siteContent_widgetLayout_rptWidgets_ctl03_widgetContainer_ctl00_btnSearch");
+    await page.waitFor(2000);
+```
+You might be wondering what parameters go in those functions. Most of them are selectors. These can be found by using the insepcct element in developer tools of your browser (F12).
+### INSERT IMAGE
+
+
+To make this more flexible and readable, you can store these selectors as constants in a separate file. ```constants``` is a js file in the same project directory that contains all of my constants. This is used because I can easily modify them and the code is easier to read. 
+
+The constants are in a new file ```./lib/constants.js```. Remember to import them in ```ScrapeStateFarm-v3.js```. 
+```js
+module.exports = Object.freeze({
+
+    STATE_FARM_URI : "https://statefarm.csod.com/ats/careersite/search.aspx?site=1&c=statefarm",
+    STATE_FARM_LOC_DRPDWN : "#ctl00_siteContent_widgetLayout_rptWidgets_ctl03_widgetContainer_ctl00_rptCustomFields_ctl02_customFieldWrapper > button",
+    STATE_FARM_TX_RD_BTN : "body > div > ul > li:nth-child(46) > label > span",
+    STATE_FARM_SRCH_FRM : "#ctl00_siteContent_widgetLayout_rptWidgets_ctl03_widgetContainer_ctl00_rptCustomFields_ctl00_customFieldWrapper_ctl00_txtValue",
+    STATE_FARM_SRCH_TECH : "technology",
+    STATE_FARM_SUBMIT_BTN : "#ctl00_siteContent_widgetLayout_rptWidgets_ctl03_widgetContainer_ctl00_btnSearch", 
+    
+});
+```
+
+To access the constants:
+```js
+    const page = await browser.newPage();
+    await page.goto(constants.STATE_FARM_URI);
+    await page.click(constants.STATE_FARM_LOC_DRPDWN);
+    await page.click(constants.STATE_FARM_TX_RD_BTN);
+    await page.click(constants.STATE_FARM_SRCH_FRM);
+    await page.keyboard.type(constants.STATE_FARM_SRCH_TECH);
+    await page.click(constants.STATE_FARM_SUBMIT_BTN);
+    await page.waitFor(2000);
+```
 
 # Conclusion:
 
