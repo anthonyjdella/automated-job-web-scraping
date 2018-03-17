@@ -17,7 +17,7 @@ After getting data from the company's website, that data will be saved to a text
 1. **Node.js**
 
    Node.js is a cross-platform JavaScript environment for executing JavaScript code server-side (rather than client-side).
-   It is a useful language for asynchronous I/O, or processing that permits other processing to continue before the transmission has finished. To learn more about Node.js visit this [link] (https://nodejs.org/api/index.html).
+   It is a useful language for asynchronous I/O, or processing that permits other processing to continue before the transmission has finished. To learn more about Node.js visit this [link](https://nodejs.org/api/index.html).
   
 2. **Puppeteer**
 
