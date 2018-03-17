@@ -9,6 +9,18 @@ The purpose of the script is to automatically fetch job posting data from select
 For example, the script will go to a hard-coded company website and enter some filter criteria. Then it will get that data.
 After getting data from the company's website, that data will be saved to a text file, in which the user can easily view new job postings.
 
+# Table of Contents: 
+
+1. [Notes](#notes)
+2. [Tools](#tools)
+3. [Install](#install)
+4. [Run](#run)
+5. [Guide](#guide)
+6. [Setup](#setup)
+7. [Coding](#coding)
+7. [Output](#output)
+8. [Thanks](#thanks)
+
 # Notes: 
 - Results may change depending on the markup. If the existing markup is changed, this script won't work and will need to be re-worked.
 - This current version of the script is very specific and isn't scalable. It's specific to pre-selected job filters and companies.
@@ -27,13 +39,16 @@ After getting data from the company's website, that data will be saved to a text
 
    File System is an API for interacting with the file system, such as creating a document and saving it to your file system. For more information, this is a link to their documentation: [FS Docs](https://nodejs.org/api/fs.html#fs_file_system)
 
-# Install & Run:
+# Install:
 
 1. Install Node.js
 2. To check if it's already installed or to check the verison number (I'm on 8.10.0), type this in your console: 
 ```
 $ node -v
 ```
+
+# Run: 
+
 To run this script, type these into your console:
 ```
 $ npm install
@@ -43,7 +58,8 @@ $ node ScrapeStateFarm-v3.js
   * npm install will download all the required dependencies for this project (Puppeteer and File System)
 
 # Guide: 
-## Project Setup:
+
+# Setup:
 Create a folder on your directory that will hold all of the project files.
 ```
 $ mkdir automated-web-scraping
@@ -61,7 +77,7 @@ $ npm install file-system --save
 ```
 Create a main file that contains the code. Most of the code in the next section will be in this file. I saved it as ```ScrapeStateFarm-v3.js``` within the project directory that we created earlier ```automated-web-scraping```.
 
-## Coding:
+# Coding:
 Import puppeteer and file system. We will talk about what ```constants``` is later on. 
 ```js
 const puppeteer = require('puppeteer');
@@ -258,7 +274,7 @@ run().then((value) => {
     });
 });
 ```
-## Output:
+# Output:
 
 1. What the job results look like on State Farm's website.
 ![alt text](https://github.com/leeznon/automated-job-web-scraping/blob/master/screenshots/browser-results.png
