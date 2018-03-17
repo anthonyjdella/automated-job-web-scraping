@@ -27,9 +27,9 @@ After getting data from the company's website, that data will be saved to a text
 
    File System is an API for interacting with the file system, such as creating a document and saving it to your file system. For more information about File System, this is a link to their documentation: [FS Docs](https://nodejs.org/api/fs.html#fs_file_system)
 
-# Install:
+# Install & Run:
 1. Install Node.js
-2. To check if it's already installed or to check the verison number, type this in your console: 
+2. To check if it's already installed or to check the verison number (I'm on 8.10.0), type this in your console: 
 ```
 $ node -v
 ```
@@ -42,9 +42,44 @@ $ node ScrapeStateFarm-v3.js
   * npm install will download all the required dependencies for this project (Puppeteer and File System)
 
 # Guide: 
+## Project Setup
+Create a folder on your directory that will hold all of the project files.
+```
+$ mkdir automated-web-scraping
+$ cd automated-web-scraping
+```
+Automatically create a package.json file which is needed for handling dependencies and metadata.
+```
+$ npm init
+```
+
+To install Puppeteer and File System:
+```
+$ npm i --save puppeteer
+$ npm install file-system --save
+```
+Create a main file that contains the code. Most of the code in the next section will be in this file. I saved it as ```ScrapeStateFarm-v3.js``` within the project directory that we created earlier ```automated-web-scraping```.
+
+## Coding
+Import puppeteer and file system. We will talk about what ```constants``` is later on. 
+```js
+const puppeteer = require('puppeteer');
+const fs = require("fs");
+const constants = require("./lib/constants.js");
+```
+The code is written with asynchronous I/O in mind. Node.js 8 uses ```async``` and ```await``` keywords, which you will see throughout the script. ```async``` means a function returns a resolved Promise. ```await``` means wait until the Promise settles and return its result. 
+
+This is basically how the structure works. ```Run()``` is an async function. When it finishes, the value will be passed in ```.then((value) => {```
+```js
+async function run() {
+//await
+}
+run().then((value) => {
+});
+```
 
 
-# Output:
+# Conclusion:
 
 # Thanks: 
 
