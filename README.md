@@ -7,7 +7,7 @@
 
 > How many times have you missed out on job opportunities because you didn't know a company was hiring for that position? It might be the perfect job for you, but you just didn't know about it!
 
-**This app will help you keep up to date with job postings so you never miss out on the right job opportunity!**
+**This app will keep you up to date with job postings so you never miss out on the right job opportunity!**
 
 ![alt text](http://i2.wp.com/www.testautomationguru.com/wp-content/uploads/2017/08/header-stock.png?resize=647%2C196
  "Scrape data from a web page to a file on your computer")
