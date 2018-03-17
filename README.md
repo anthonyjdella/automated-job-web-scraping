@@ -87,7 +87,9 @@ Now comes the web automation part. This will automatically launch the Chrome Hea
 ```browser.newPage()``` will open a new tab in the browser. Next, we will go to the website we are trying to scrape. In this case, we are going to State Farm's career website to look for job postings. After that, we need to enter some filters to display the jobs that we want to scrape. I only want to see "technology" jobs in Texas. To do all of this with Puppeteer, use ```.click()``` function to click on a section of the web page, use ```.keyboard.type()``` to automatically type something, use ```.waitFor()``` to wait for the page to load the results. 
 
 Now think of the flow that you need to do this manually and code it. Go to the website -> Click on the Location Dropdown -> Select 'Texas' location -> Select the Search field -> Type 'technology' -> Search for the results -> Wait for the page to load.
-### INSERT IMAGE
+![alt text](https://github.com/leeznon/automated-job-web-scraping/blob/master/screenshots/filter-jobs.png
+ "Show Job Filter Results")
+ 
 ```js
     const page = await browser.newPage();
     await page.goto("https://statefarm.csod.com/ats/careersite/search.aspx?site=1&c=statefarm");
@@ -99,8 +101,8 @@ Now think of the flow that you need to do this manually and code it. Go to the w
     await page.waitFor(2000);
 ```
 You might be wondering what parameters go in those functions. Most of them are selectors. These can be found by using the insepcct element in developer tools of your browser (F12).
-### INSERT IMAGE
-
+![alt text](https://github.com/leeznon/automated-job-web-scraping/blob/master/screenshots/location-selector.png
+ "Location dropdown selector in Chrome")
 
 To make this more flexible and readable, you can store these selectors as constants in a separate file. ```constants``` is a js file in the same project directory that contains all of my constants. This is used because I can easily modify them and the code is easier to read. 
 
@@ -136,7 +138,8 @@ const numPages = await getNumPages(page);
 ```
 
 Within this async function, I need to pass ```page```. Next, I need to identify the page selector ```PAGE_CONTAINTER_SELECTOR``` that contains all of the page numbers.
-### INSERT IMAGE
+![alt text](https://github.com/leeznon/automated-job-web-scraping/blob/master/screenshots/page-buttons-selector.png
+ "Container selector for all the pages")
 
 After I have that selector, I need to pass that as an argument. Notice that ```pageCount``` is the first time we've seen ```await``` keyword. ```PAGE_CONTAINTER_SELECTOR``` will be passed as ```sel``` to ```document.querySelector(sel)```.
 But was just the container element, so to select each individual page button, I need to use ```pageContainer.getElementsByClassName();```. Next, loop through each page and get the number of pages. If there is no page button, return '1' because there is only 1 page. The data will be stored in ```pageCount```, then we return ```pageCount```.
@@ -159,7 +162,8 @@ async function getNumPages(page) {
 }
 ```
 After calling ```getNumPages``` and returning the number of pages, we can loop through the pages. Then at each page, can loop through the list of job postings on the site. Take a look at how the State Farm website is. It has 1 OR multiple pages. Then a list of job postings.
-### INSERT IMAGE
+![alt text](https://github.com/leeznon/automated-job-web-scraping/blob/master/screenshots/page-buttons-and-job-list.png
+ "State Farm website with number of pages and jobs in a list")
 
 Now look at the code to do the actual web scraping. Again, the outer loop is to loop through the pages and the inner loop goes through the list of job postings.
 ```js
@@ -235,7 +239,13 @@ run().then((value) => {
 ```
 ## Output:
 
-### INSERT IMAGE
+1. What the job results look like on State Farm's website.
+![alt text](https://github.com/leeznon/automated-job-web-scraping/blob/master/screenshots/browser-results.png
+ "Result of State Farm jobs in web browser.")
+ 
+ 2. What the job results look like on the text file ```state-farm-jobs.txt```.
+ ![alt text](https://github.com/leeznon/automated-job-web-scraping/blob/master/screenshots/txt-file-results.png
+ "Result of State Farm jobs in text file.")
 
 # Thanks: 
 
