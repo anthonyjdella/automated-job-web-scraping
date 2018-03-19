@@ -26,9 +26,11 @@ After getting data from the company's website, that data will be saved to a text
 4. [Run](#run)
 5. [Guide](#guide)
 6. [Setup](#setup)
-7. [Coding](#coding)
-7. [Output](#output)
-8. [Thanks](#thanks)
+7. [Automation](#automation)
+8. [Scraping](#scraping)
+9. [Email](#email)
+10. [Output](#output)
+11. [Thanks](#thanks)
 
 # Notes: 
 - Results may change depending on the markup. If the existing markup is changed, this script won't work and will need to be re-worked.
@@ -47,6 +49,10 @@ After getting data from the company's website, that data will be saved to a text
 3. **File System**
 
    File System is an API for interacting with the file system, such as creating a document and saving it to your file system. For more information, this is a link to their documentation: [FS Docs](https://nodejs.org/api/fs.html#fs_file_system)
+   
+4. **Node Mailer**
+
+   Node Mailer is a package that has built in email functionality with Node.js. It also allows you to send attachments via email. Note that there are some issues with Gmail, but it worked in my case. [Node-mailer Github](https://github.com/nodemailer/nodemailer)
 
 # Install:
 
@@ -61,7 +67,7 @@ $ node -v
 To run this script, type these into your console:
 ```
 $ npm install
-$ node ScrapeStateFarm-v3.js
+$ node index.js
 ```
 
   * npm install will download all the required dependencies for this project (Puppeteer and File System)
@@ -86,7 +92,7 @@ $ npm install file-system --save
 ```
 Create a main file that contains the code. Most of the code in the next section will be in this file. I saved it as ```ScrapeStateFarm-v3.js``` within the project directory that we created earlier ```automated-web-scraping```.
 
-# Coding:
+# Automation:
 Import puppeteer and file system. We will talk about what ```constants``` is later on. 
 ```js
 const puppeteer = require('puppeteer');
@@ -177,6 +183,8 @@ To access the constants with re-written code:
     await page.click(constants.STATE_FARM_SUBMIT_BTN);
     await page.waitFor(2000);
 ```
+# Scraping
+
 We will need to get the job results from multiple pages (if there are many job openings). To do this, find out how many pages of jobs there are. Call this function to get the number of pages.
 ```js
 const numPages = await getNumPages(page);
@@ -283,6 +291,13 @@ run().then((value) => {
     });
 });
 ```
+
+# Email:
+
+So far, we have our results saved to a text file which is pretty cool. But now we want to be notified when the script finishes. We will add some code to send us an automated email with the attached ```state-farm-jobs.txt``` file.
+
+
+
 # Output:
 
 1. What the job results look like on State Farm's website.
