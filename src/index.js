@@ -1,4 +1,4 @@
-const stateFarmModule = require("./ScrapeStateFarm-v3.js");
-const emailModule = require("./SendEmail.js");
+const stateFarmModule = require("./scrape-state-farm.js");
+const emailModule = require("./send-email.js");
 
 stateFarmModule();

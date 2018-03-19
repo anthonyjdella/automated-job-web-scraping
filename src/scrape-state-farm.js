@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const constants = require("./../util/constants.js");
 const fs = require("fs");
-const emailModule = require("./SendEmail.js");
+const emailModule = require("./send-email.js");
 
 function stateFarmModule() {
     async function run() {
@@ -75,7 +75,7 @@ function stateFarmModule() {
         fs.writeFile("state-farm-jobs.txt", data, function (err) {
             console.log(constants.SUCCESS_STMT);
         });
-        console.log("ScrapeStateFarm-v3.js - created txt file")
+        console.log("scrape-state-farm.js - created txt file")
         emailModule();
     });
 }
