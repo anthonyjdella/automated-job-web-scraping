@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
-const constants = require("./lib/constants.js");
+const constants = require("./misc/constants.js");
 const fs = require("fs");
-const emailModule = require("./email-test.js");
+const emailModule = require("./SendEmail.js");
 
 function stateFarmModule() {
     async function run() {
