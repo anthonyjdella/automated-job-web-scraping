@@ -29,7 +29,7 @@ After getting data from the company's website, that data will be saved to a text
 7. [Automation](#automation)
 8. [Scraping](#scraping)
 9. [Email](#email)
-10. [Modules])(#modules)
+10. [Modules](#modules)
 11. [Output](#output)
 12. [Thanks](#thanks)
 
@@ -304,7 +304,7 @@ $ npm i nodemailer-smtp-transport
 ```
 
 Copy this code and fill out the details and file path of ```state-farm-jobs.txt```:
-```
+```js
 const transporter = nodemailer.createTransport(smtpTransport({
         service: 'Gmail',
         host: 'smtp.gmail.com',
@@ -339,7 +339,7 @@ What does ```credentials.email``` and ```credentials.password``` mean? If you wa
 
 In ```credentials.js```, fill these values.
 
-```
+```js
 module.exports = {
 
     email: "YOUR_EMAIL",
@@ -351,12 +351,13 @@ module.exports = {
 In your .gitignore file, add the name of the file you want git to ignore/hide. So you would add ```credentials.js``` in that file.
 
 Now, back to ```SendEmail.js```, you would import the credentials file at the top like so,
-```
+```js
 const credentials = require('./credentials.js');
 ```
 
 And when you want to access that data, type (name_of_file).(key):
-```credentials.email
+```js
+   credentials.email
    credentials.password
 ```
 
