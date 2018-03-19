@@ -29,8 +29,9 @@ After getting data from the company's website, that data will be saved to a text
 7. [Automation](#automation)
 8. [Scraping](#scraping)
 9. [Email](#email)
-10. [Output](#output)
-11. [Thanks](#thanks)
+10. [Modules](#modules)
+11. [Output](#output)
+12. [Thanks](#thanks)
 
 # Notes: 
 - Results may change depending on the markup. If the existing markup is changed, this script won't work and will need to be re-worked.
@@ -294,7 +295,76 @@ run().then((value) => {
 
 # Email:
 
-So far, we have our results saved to a text file which is pretty cool. But now we want to be notified when the script finishes. We will add some code to send us an automated email with the attached ```state-farm-jobs.txt``` file.
+So far, we have our results saved to a text file which is pretty cool. But now we want to be notified when the script finishes. We will add some code to send us an automated email with the attached ```state-farm-jobs.txt``` file. Create a new file called ```SendEmail.js```.
+
+Run commands to install node packages:
+```
+$ npm install nodemailer
+$ npm i nodemailer-smtp-transport
+```
+
+Copy this code and fill out the details and file path of ```state-farm-jobs.txt```:
+```js
+const transporter = nodemailer.createTransport(smtpTransport({
+        service: 'Gmail',
+        host: 'smtp.gmail.com',
+        port: 465,
+        auth: {
+            user: credentials.email,
+            pass: credentials.password
+        }
+    }));
+
+    transporter.sendMail({
+        from: credentials.email,
+        subject: "State Farm Jobs",
+        text: "Hey, here are the job searches:",
+        attachments: [
+            {
+                'filename': 'state-farm-jobs.txt',
+                'path': 'C:/Users/Anthony/Documents/git/automated-job-web-scraping/state-farm-jobs.txt'
+            }
+        ],
+        to: credentials.email
+    }, function (error, info) {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('Message %s sent: %s', info.messageId, info.response);
+        console.log("E-Mail sent successfully to " + credentials.email);
+    });
+```
+
+What does ```credentials.email``` and ```credentials.password``` mean? If you wanted to, you could enter a String with your email and password but to protect that, I have stored those in a separate file called ```credentials.js```.
+
+In ```credentials.js```, fill these values.
+
+```js
+module.exports = {
+
+    email: "YOUR_EMAIL",
+    password: "YOUR_PASSWORD"
+
+}
+```
+
+In your .gitignore file, add the name of the file you want git to ignore/hide. So you would add ```credentials.js``` in that file.
+
+Now, back to ```SendEmail.js```, you would import the credentials file at the top like so,
+```js
+const credentials = require('./credentials.js');
+```
+
+And when you want to access that data, type (name_of_file).(key):
+```js
+   credentials.email
+   credentials.password
+```
+
+# Modules
+
+We have 2 main Node.js files which contains our code. ```ScrapeStateFarm-v3.js``` & ```SendEmail.js```. To run them together we need to package each of them into separate modules, create an ```index.js``` and import then call those modules from that new file.
+
 
 
 
@@ -307,6 +377,8 @@ So far, we have our results saved to a text file which is pretty cool. But now w
  2. What the job results look like on the text file ```state-farm-jobs.txt``` and the ```console```.
  ![alt text](https://github.com/leeznon/automated-job-web-scraping/blob/master/screenshots/txt-file-results.png
  "Result of State Farm jobs in text file.")
+ 
+ 3. Check your email. You should have received a message with an attachment containing all of the scraped jobs.
 
 # Thanks: 
 
