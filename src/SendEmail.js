@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const fs = require("fs");
 const smtpTransport = require('nodemailer-smtp-transport');
-const credentials = require('./misc/credentials.js');
+const credentials = require('./../util/credentials.js');
 
 
 function emailModule() {

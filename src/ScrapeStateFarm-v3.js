@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer');
-const constants = require("./misc/constants.js");
+const constants = require("./../util/constants.js");
 const fs = require("fs");
 const emailModule = require("./SendEmail.js");
 
