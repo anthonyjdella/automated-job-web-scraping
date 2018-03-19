@@ -31,7 +31,7 @@ function emailModule() {
             return console.log(error);
         }
         console.log('Message %s sent: %s', info.messageId, info.response);
-        console.log("E-Mail sent successfully to leeznon@gmail.com");
+        console.log("E-Mail sent successfully to " + credentials.email);
     });
 }
 
