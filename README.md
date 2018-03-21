@@ -14,9 +14,7 @@
  
 Automated-job-web-scraping is a script, written in Node.js, that does some web automation and web/data scraping. The APIs used include Puppeteer, File System, & Nodemailer.
 
-The purpose of the script is to automatically fetch job posting data from select company career websites.
-For example, the script will go to a hard-coded company website and enter some filter criteria. Then it will scrape that data.
-After getting data from the company's website, that data will be saved to a text file, and sent via email as an attachment. Now, the user can easily view new job postings. **You'll never miss out on that job posting again!**
+The purpose of the script is to automatically fetch job posting data from a company’s website. More specifically, the script will automatically go to “State Farm’s” website and search for specific jobs. Then, it will scrape, or extract, the data from the web page and save it to a text file. After that, you will receive an email with all of the new jobs that have shown up from StateFarm.com. **You’ll never miss out on that job opening again!**
 
 # Table of Contents: 
 
@@ -160,7 +158,7 @@ You might be wondering what parameters go in those functions. Most of them are s
 
 To make this more flexible and readable, you can store these selectors as constants in a separate file. ```constants``` is a js file in the same project directory that contains all of my constants. This is used because I can easily modify them and the code is easier to read. 
 
-The constants are in a new file ```./util/constants.js```. Remember to import them in ```ScrapeStateFarm-v3.js```. 
+The constants are in a new file ```./util/constants.js```. Remember to import them in ```scrape-state-farm.js```. 
 ```js
 module.exports = Object.freeze({
 
