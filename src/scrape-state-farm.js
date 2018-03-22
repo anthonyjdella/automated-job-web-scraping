@@ -57,12 +57,17 @@ function stateFarmModule() {
         let pageCount = await page.evaluate((sel) => {
             let defaultCount = 1;
             let pageContainer = document.querySelector(sel);
-            let allPages = pageContainer.getElementsByClassName("pagerLink");
-            if (allPages.length > 0) {
-                return allPages.length;
+            try {
+                let allPages = pageContainer.getElementsByClassName("pagerLink");
+                if (allPages.length > 0) {
+                    return allPages.length;
+                }
+                else {
+                    return defaultCount;
+                }
             }
-            else {
-                return defaultCount;
+            catch (err){
+                console.log("Caught an exception: " + err);
             }
         }, PAGE_CONTAINTER_SELECTOR);
         return pageCount;
