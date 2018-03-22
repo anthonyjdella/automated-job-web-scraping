@@ -12,11 +12,9 @@
 ![alt text](http://i2.wp.com/www.testautomationguru.com/wp-content/uploads/2017/08/header-stock.png?resize=647%2C196
  "Scrape data from a web page to a file on your computer")
  
-Automated-job-web-scraping is a script, written in Node.js, that does some web automation and web/data scraping. The APIs used include Puppeteer and File System.
+Automated-job-web-scraping is a script, written in Node.js, that does some web automation and web/data scraping. The APIs used include Puppeteer, File System, & Nodemailer.
 
-The purpose of the script is to automatically fetch job posting data from select company career websites.
-For example, the script will go to a hard-coded company website and enter some filter criteria. Then it will get that data.
-After getting data from the company's website, that data will be saved to a text file, in which the user can easily view new job postings. **You'll never miss out on that job posting again!**
+The purpose of the script is to automatically fetch job posting data from a company’s website. More specifically, the script will automatically go to “State Farm’s” website and search for specific jobs. Then, it will scrape, or extract, the data from the web page and save it to a text file. After that, you will receive an email with all of the new jobs that have shown up from StateFarm.com. **You’ll never miss out on that job opening again!**
 
 # Table of Contents: 
 
@@ -51,9 +49,9 @@ After getting data from the company's website, that data will be saved to a text
 
    File System is an API for interacting with the file system, such as creating a document and saving it to your file system. For more information, this is a link to their documentation: [FS Docs](https://nodejs.org/api/fs.html#fs_file_system)
    
-4. **Node Mailer**
+4. **Nodemailer**
 
-   Node Mailer is a package that has built in email functionality with Node.js. It also allows you to send attachments via email. Note that there are some issues with Gmail, but it worked in my case. [Node-mailer Github](https://github.com/nodemailer/nodemailer)
+   Nodemailer is a package that has built in email functionality with Node.js. It also allows you to send attachments via email. Note that there are some issues with Gmail, but it worked in my case. [Node-mailer Github](https://github.com/nodemailer/nodemailer)
 
 # Install:
 
@@ -71,15 +69,15 @@ $ npm install
 $ node index.js
 ```
 
-  * npm install will download all the required dependencies for this project (Puppeteer and File System)
+  * npm install will download all the required dependencies for this project (Puppeteer, File System, Nodemialer)
 
 # Guide: 
 
 # Setup:
 Create a folder on your directory that will hold all of the project files.
 ```
-$ mkdir automated-web-scraping
-$ cd automated-web-scraping
+$ mkdir automated-job-web-scraping
+$ cd automated-job-web-scraping
 ```
 Automatically create a package.json file which is needed for handling dependencies and metadata.
 ```
@@ -91,14 +89,15 @@ To install Puppeteer and File System:
 $ npm i --save puppeteer
 $ npm install file-system --save
 ```
-Create a main file that contains the code. Most of the code in the next section will be in this file. I saved it as ```ScrapeStateFarm-v3.js``` within the project directory that we created earlier ```automated-web-scraping```.
+Create a main file that contains the code. Most of the scraping code in the next section will be in this file. I saved it as ```scrape-state-farm.js``` within a subfolder of the project directory that we created earlier ```automated-job-web-scraping/src```. Src is a folder that I created that includes the primary files.
 
 # Automation:
-Import puppeteer and file system. We will talk about what ```constants``` is later on. 
+Import the external dependencies. We will talk about what ```constants``` is later on. 
 ```js
 const puppeteer = require('puppeteer');
 const fs = require("fs");
-const constants = require("./lib/constants.js");
+const constants = require("./../util/constants.js");
+const emailModule = require("./send-email.js");
 ```
 The code is written with asynchronous I/O in mind. Node.js 8 uses ```async``` and ```await``` keywords, which you will see throughout the script. ```async``` means a function returns a resolved Promise. ```await``` means wait until the Promise settles and return its result. 
 
@@ -159,7 +158,7 @@ You might be wondering what parameters go in those functions. Most of them are s
 
 To make this more flexible and readable, you can store these selectors as constants in a separate file. ```constants``` is a js file in the same project directory that contains all of my constants. This is used because I can easily modify them and the code is easier to read. 
 
-The constants are in a new file ```./lib/constants.js```. Remember to import them in ```ScrapeStateFarm-v3.js```. 
+The constants are in a new file ```./util/constants.js```. Remember to import them in ```scrape-state-farm.js```. 
 ```js
 module.exports = Object.freeze({
 
@@ -281,7 +280,7 @@ After we have have gotten the data from all of the pages, we need to close the h
     return arrayJobResults;
 ```
 
-Lastly, after we have our jobs stored in the array, we will do some formatting and log it to the console. Up until now, we haven't used File System, but here it comes. ```.writeFile()``` will take our data and print it to a text file.
+After we have our jobs stored in the array, we will do some formatting and log it to the console. Up until now, we haven't used File System, but here it comes. ```.writeFile()``` will take our data and print it to a text file. Think of ```.then()``` to do this after the async function has completed.
 
 ```js
 run().then((value) => {
@@ -295,7 +294,7 @@ run().then((value) => {
 
 # Email:
 
-So far, we have our results saved to a text file which is pretty cool. But now we want to be notified when the script finishes. We will add some code to send us an automated email with the attached ```state-farm-jobs.txt``` file. Create a new file called ```SendEmail.js```.
+So far, we have our results saved to a text file which is pretty cool. But now we want to be notified when the script finishes. We will add some code to send us an automated email with the attached ```state-farm-jobs.txt``` file. Create a new file called ```send-email.js``` and put this in your ```src``` folder.
 
 Run commands to install node packages:
 ```
@@ -335,7 +334,7 @@ const transporter = nodemailer.createTransport(smtpTransport({
     });
 ```
 
-What does ```credentials.email``` and ```credentials.password``` mean? If you wanted to, you could enter a String with your email and password but to protect that, I have stored those in a separate file called ```credentials.js```.
+What does ```credentials.email``` and ```credentials.password``` mean? If you wanted to, you could enter a String with your email and password but to protect that, I have stored those in a separate file called ```credentials.js``` in the ```util``` folder.
 
 In ```credentials.js```, fill these values.
 
@@ -348,9 +347,9 @@ module.exports = {
 }
 ```
 
-In your .gitignore file, add the name of the file you want git to ignore/hide. So you would add ```credentials.js``` in that file.
+In your ```.gitignore``` file, add the name of the file you want git to ignore/hide. So you would add ```credentials.js``` in that file.
 
-Now, back to ```SendEmail.js```, you would import the credentials file at the top like so,
+Now, back to ```send-email.js```, you would import the credentials file at the top like so,
 ```js
 const credentials = require('./credentials.js');
 ```
@@ -363,8 +362,42 @@ And when you want to access that data, type (name_of_file).(key):
 
 # Modules
 
-We have 2 main Node.js files which contains our code. ```ScrapeStateFarm-v3.js``` & ```SendEmail.js```. To run them together we need to package each of them into separate modules, create an ```index.js``` and import then call those modules from that new file.
+We have 2 main Node.js files (in ```src```) which contains our code, ```scrape-state-farm.js``` & ```send-email.js```. To run them together we need to package each of them into separate modules. In each one of the files, wrap the code into functions and export them.
 
+```js
+function stateFarmModule() {
+//previous code here
+}
+module.exports = stateFarmModule;
+```
+
+```js
+function emailModule() {
+//previous code here
+}
+module.exports = emailModule;
+```
+
+Create ```index.js``` and import those exported functions. 
+```js
+const stateFarmModule = require("./scrape-state-farm.js");
+const emailModule = require("./send-email.js");
+
+stateFarmModule();
+```
+
+In ```scrape-state-farm.js```, after ```.then()``` I will call the email module so that my results are saved to a text file, then the email module is called. 
+```js
+    run().then((value) => {
+        let data = value.join("\r\n");
+        console.log(data);
+        fs.writeFile("state-farm-jobs.txt", data, function (err) {
+            console.log(constants.SUCCESS_STMT);
+        });
+        console.log("scrape-state-farm.js - created txt file")
+        emailModule();
+    });
+```
 
 
 
