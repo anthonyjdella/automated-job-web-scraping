@@ -5,7 +5,7 @@
   "main": "Controller.js",
   "dependencies": {
     "fs": "0.0.1-security",
-    "nodemailer": "^4.6.3",
+    "nodemailer": "^6.4.16",
     "nodemailer-smtp-transport": "^2.7.4",
     "npm": "^5.7.1",
     "puppeteer": "^1.1.1"
