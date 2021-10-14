@@ -7,7 +7,7 @@
     "fs": "0.0.1-security",
     "nodemailer": "^4.6.3",
     "nodemailer-smtp-transport": "^2.7.4",
-    "npm": "^5.7.1",
+    "npm": "^6.14.6",
     "puppeteer": "^1.1.1"
   },
   "devDependencies": {},
